@@ -1,19 +1,27 @@
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: "apps/profile-service/.env",
+});
+
 import Fastify from "fastify";
 import { app } from "./app/app";
-import { loggerInstance } from "@org/shared";
+import { createLogger, appConfig } from "@org/shared";
 
-const host = process.env.HOST ?? "localhost";
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-
-const server = Fastify({ loggerInstance });
+const server = Fastify({
+  loggerInstance: createLogger({
+    level: appConfig.LOG_LEVEL,
+    pretty: appConfig.NODE_ENV === "development",
+  }),
+});
 
 server.register(app);
 
-server.listen({ port, host }, (err) => {
+server.listen({ port: appConfig.PORT, host: appConfig.HOST }, (err) => {
   if (err) {
     server.log.error(err);
     process.exit(1);
   } else {
-    console.log(`[ ready ] http://${host}:${port}`);
+    console.log(`[ ready ] http://${appConfig.HOST}:${appConfig.PORT}`);
   }
 });
