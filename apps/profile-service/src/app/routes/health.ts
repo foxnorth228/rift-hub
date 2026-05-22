@@ -1,15 +1,16 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance } from "fastify";
 
 export default async function (fastify: FastifyInstance) {
   fastify.get(
-    '/health',
+    "/health",
     {
       schema: {
+        tags: ["Health"],
         response: {
           200: {
-            type: 'object',
+            type: "object",
             properties: {
-              ok: { type: 'boolean' },
+              ok: { type: "boolean" },
             },
           },
         },

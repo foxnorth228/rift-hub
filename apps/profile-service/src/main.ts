@@ -4,9 +4,10 @@ dotenv.config({
   path: "apps/profile-service/.env",
 });
 
+import { appConfig, createLogger } from "@org/shared";
 import Fastify from "fastify";
-import { app } from "./app/app";
-import { createLogger, appConfig } from "@org/shared";
+
+import { app, appV1 } from "./app/apps";
 
 const server = Fastify({
   loggerInstance: createLogger({
@@ -16,6 +17,7 @@ const server = Fastify({
 });
 
 server.register(app);
+server.register(appV1);
 
 server.listen({ port: appConfig.PORT, host: appConfig.HOST }, (err) => {
   if (err) {
